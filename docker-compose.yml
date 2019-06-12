@@ -1,0 +1,44 @@
+version: "3.1"
+services:
+
+  app:
+    build: 
+      context: .
+      dockerfile: compose/php/Dockerfile
+    image: "lazamini_app"
+    container_name: "lazamini_app_container"
+    working_dir: /lazamini
+    tty: true
+    volumes: 
+      - ./:/lazamini
+    environment: 
+      DB_DATABASE: "lazamini_db"
+      DB_USERNAME: "lazamini_user"
+      DB_PASSWORD: "lazamini_pws"
+
+  lazamini_db:
+    build:
+      context: compose/mysql/
+    image: "lazamini_db"
+    volumes:
+      - dbdata:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: "root"
+      MYSQL_DATABASE: "lazamini_db"
+      MYSQL_USER: "lazamini_user"
+      MYSQL_PASSWORD: "lazamini_pws"
+    expose:
+      - "3306"
+    ports: 
+      - "4300:3306"
+
+  lazamini_webserver:
+    build: 
+      context: compose/nginx/
+    image: "lazamini_webserver"
+    volumes: 
+      - ./:/lazamini
+    ports: 
+      - "7000:80"
+volumes:
+  dbdata:
