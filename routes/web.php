@@ -11,11 +11,19 @@
 |
 */
 
-Route::get('/', function () {
-    try {
-        DB::connection()->getPdo();
-    } catch (\Exception $e) {
-        die("Could not connect to the database.  Please check your configuration. error:" . $e );
-    }
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     try {
+//         DB::connection()->getPdo();
+//     } catch (\Exception $e) {
+//         die("Could not connect to the database.  Please check your configuration. error:" . $e );
+//     }
+//     return view('welcome');
+// });
+
+Auth::routes();
+// Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
+
+Route::get('/','DashboardController@index')->name('dashboard');
+
+Route::get('user','UserController@index')->name('user-index');
+
